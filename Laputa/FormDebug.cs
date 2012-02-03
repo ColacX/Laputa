@@ -9,9 +9,9 @@ using System.Windows.Forms;
 
 namespace Laputa
 {
-	public partial class MainForm : Form
+	public partial class FormDebug : CustomForm
 	{
-		public MainForm()
+		public FormDebug()
 		{
 			InitializeComponent();
 		}
