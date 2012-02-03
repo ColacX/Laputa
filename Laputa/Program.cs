@@ -18,7 +18,9 @@ namespace Laputa
 			Application.SetCompatibleTextRenderingDefault( false );
 
 			FormWork formWork = new FormWork();
+			formWork.Load();
 			FormDebug formDebug = new FormDebug();
+			formDebug.Load();
 
 			NotifyIcon notifyIcon = new NotifyIcon();
 			notifyIcon.Icon = Properties.Resources.Icon1;
@@ -34,9 +36,16 @@ namespace Laputa
 				//ask to stop script
 				
 				notifyIcon.Visible = false;
-				formWork.ForcedClose();
-				formDebug.ForcedClose();
+				formWork.CloseLogic();
+				formDebug.CloseLogic();
 				Application.Exit();
+			};
+
+			var menuItemReset = new ToolStripMenuItem();
+			menuItemReset.Text = "Reset";
+
+			menuItemReset.Click += ( o, e ) =>
+			{
 			};
 
 			var menuItemWork = new ToolStripMenuItem();
@@ -57,23 +66,39 @@ namespace Laputa
 				formDebug.Visible = menuItemDebug.Checked;
 			};
 
+			var releaseVersion = "Laputa 0.0.0.1";
+			notifyIcon.Text = releaseVersion;
+
 			notifyIcon.Click += ( s, a ) => 
 			{
 				try
 				{
-					notifyIcon.ContextMenuStrip.Items.Clear();
+					var args = (MouseEventArgs)a;
 
-					menuItemWork.Checked = formWork.Visible;
-					notifyIcon.ContextMenuStrip.Items.Add( menuItemWork );
+					if(args.Button == MouseButtons.Right)
+					{
+						//show context menu
+						notifyIcon.ContextMenuStrip.Items.Clear();
 
-					menuItemDebug.Checked = formDebug.Visible;
-					notifyIcon.ContextMenuStrip.Items.Add( menuItemDebug );
+						menuItemWork.Checked = formWork.Visible;
+						notifyIcon.ContextMenuStrip.Items.Add( menuItemWork );
+
+						menuItemDebug.Checked = formDebug.Visible;
+						notifyIcon.ContextMenuStrip.Items.Add( menuItemDebug );
 					
-					notifyIcon.ContextMenuStrip.Items.Add( "-" );
-					notifyIcon.ContextMenuStrip.Items.Add( menuItemExit );
+						notifyIcon.ContextMenuStrip.Items.Add( "-" );
+						notifyIcon.ContextMenuStrip.Items.Add( menuItemReset );
+						notifyIcon.ContextMenuStrip.Items.Add( menuItemExit );
 
-					MethodInfo mi = typeof( NotifyIcon ).GetMethod( "ShowContextMenu", BindingFlags.Instance | BindingFlags.NonPublic );
-					mi.Invoke( notifyIcon, null );
+						MethodInfo mi = typeof( NotifyIcon ).GetMethod( "ShowContextMenu", BindingFlags.Instance | BindingFlags.NonPublic );
+						mi.Invoke( notifyIcon, null );
+					}
+					else if( args.Button == MouseButtons.Left )
+					{
+						//bring all forms to front;
+						formWork.Activate();
+						formDebug.Activate();
+					}
 				}
 				catch( Exception ex )
 				{
