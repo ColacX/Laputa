@@ -80,8 +80,6 @@
     <Compile Include="Laputa.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Work.cs" />
-    <Compile Include="Test.cs" />
     <EmbeddedResource Include="FormDebug.resx">
       <DependentUpon>FormDebug.cs</DependentUpon>
     </EmbeddedResource>

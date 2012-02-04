@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using System.Reflection;
+using System.IO;
 
 namespace Laputa
 {
@@ -32,13 +33,20 @@ namespace Laputa
 
 			menuItemExit.Click += ( o, e ) =>
 			{
-				//ask to save edits
-				//ask to stop script
+				try
+				{
+					//ask to save edits
+					//ask to stop script
 				
-				notifyIcon.Visible = false;
-				formWork.CloseLogic();
-				formDebug.CloseLogic();
-				Application.Exit();
+					notifyIcon.Visible = false;
+					formWork.CloseLogic();
+					formDebug.CloseLogic();
+					Application.Exit();
+				}
+				catch( Exception ex )
+				{
+					Console.WriteLine( ex );
+				}
 			};
 
 			var menuItemReset = new ToolStripMenuItem();
@@ -46,6 +54,17 @@ namespace Laputa
 
 			menuItemReset.Click += ( o, e ) =>
 			{
+				try
+				{
+					string[] filePaths = Directory.GetFiles( Directory.GetCurrentDirectory() + @"\..\Data" );
+
+					foreach( string filePath in filePaths )
+						File.Delete( filePath );
+				}
+				catch( Exception ex )
+				{
+					Console.WriteLine( ex );
+				}
 			};
 
 			var menuItemWork = new ToolStripMenuItem();
@@ -53,8 +72,15 @@ namespace Laputa
 
 			menuItemWork.Click += ( o, e ) =>
 			{
-				menuItemWork.Checked = !menuItemWork.Checked;
-				formWork.Visible = menuItemWork.Checked;
+				try
+				{
+					menuItemWork.Checked = !menuItemWork.Checked;
+					formWork.Visible = menuItemWork.Checked;
+				}
+				catch( Exception ex )
+				{
+					Console.WriteLine( ex );
+				}
 			};
 
 			var menuItemDebug = new ToolStripMenuItem();
@@ -62,8 +88,15 @@ namespace Laputa
 
 			menuItemDebug.Click += ( o, e ) =>
 			{
-				menuItemDebug.Checked = !menuItemDebug.Checked;
-				formDebug.Visible = menuItemDebug.Checked;
+				try
+				{
+					menuItemDebug.Checked = !menuItemDebug.Checked;
+					formDebug.Visible = menuItemDebug.Checked;
+				}
+				catch( Exception ex )
+				{
+					Console.WriteLine( ex );
+				}
 			};
 
 			var releaseVersion = "Laputa 0.0.0.1";
@@ -96,8 +129,8 @@ namespace Laputa
 					else if( args.Button == MouseButtons.Left )
 					{
 						//bring all forms to front;
-						formWork.Activate();
 						formDebug.Activate();
+						formWork.Activate();
 					}
 				}
 				catch( Exception ex )

@@ -29,11 +29,18 @@ namespace Laputa
 
 		private void FormWork_FormClosing( object sender, FormClosingEventArgs e )
 		{
-			if( !IsHideInstead )
-				return;
+			try
+			{
+				if( !IsHideInstead )
+					return;
 
-			e.Cancel = true;
-			Hide();
+				e.Cancel = true;
+				Hide();
+			}
+			catch( Exception ex )
+			{
+				Console.WriteLine( ex );
+			}
 		}
 
 		public void CloseLogic()
@@ -53,7 +60,7 @@ namespace Laputa
 				instanceSetting.Visible = this.Visible;
 
 				XmlSerializer serializer = new XmlSerializer( typeof( InstanceSetting ) );
-				TextWriter textWriter = new StreamWriter( Directory.GetCurrentDirectory() + "/../Data/" + this.GetType() + "InstanceSetting.xml" );
+				TextWriter textWriter = new StreamWriter( Directory.GetCurrentDirectory() + @"\..\Data\" + this.GetType() + "InstanceSetting.xml" );
 				serializer.Serialize( textWriter, instanceSetting );
 				textWriter.Close();
 			}
@@ -68,7 +75,7 @@ namespace Laputa
 			try
 			{
 				XmlSerializer serializer = new XmlSerializer( typeof( InstanceSetting ) );
-				TextReader textReader = new StreamReader( Directory.GetCurrentDirectory() + "/../Data/" + this.GetType() + "InstanceSetting.xml" );
+				TextReader textReader = new StreamReader( Directory.GetCurrentDirectory() + @"\..\Data\" + this.GetType() + "InstanceSetting.xml" );
 				instanceSetting = ( InstanceSetting )serializer.Deserialize( textReader );
 				textReader.Close();
 
